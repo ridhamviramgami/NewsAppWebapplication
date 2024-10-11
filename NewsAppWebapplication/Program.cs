@@ -7,7 +7,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("https://informia.azurewebsites.net")
+        builder => builder.WithOrigins("https://informia.azurewebsites.net", "https://newsapi.org")
                           .AllowAnyHeader()
                           .AllowAnyMethod());
 });
