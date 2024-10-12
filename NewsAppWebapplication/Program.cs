@@ -3,15 +3,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Add CORS policy
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("https://informia.azurewebsites.net", "https://newsapi.org")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod());
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,9 +16,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-// Use CORS policy
-app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthorization();
 
