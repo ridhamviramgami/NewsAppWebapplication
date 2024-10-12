@@ -29,7 +29,7 @@
                 right: 0;
                 bottom: 0;
                 height: 2px; /* Adjust height of the underline */
-                background-color: black; /* Color of the underline */
+                background-color: #dc3545; /* Color of the underline */
                 transform: scaleX(0);
                 transition: transform 0.3s ease; /* Smooth transition */
             }
@@ -45,9 +45,9 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <div class="navbar-brand">
-                <img src="https://logo-suggestion.renderforest.com/suggestions-images/9d34/3b07/9d343b07857fdcfedd539820ce4630f4.png" style="height:70px" alt="Logo">
+                <img src="https://logo-suggestion.renderforest.com/suggestions-images/ff3c/bfed/ff3cbfedf2078c5cf80d628c7cb650c6.png" style="height:80px" alt="Logo">
             </div>
-            <div class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse" style="margin-left:5%">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="" onclick="setSearchQuery('')">Home</a>
@@ -135,6 +135,7 @@
         let language = ''; // Default language (all languages)
         let sortBy = 'publishedAt'; // Default sort option
         let totalResults = 0; // Total number of results
+        let apikey = "6953ea382486420d83efb8ee4c629616"; //api key
 
         const FetchNews = async (page) => {
             console.log("fetching news...");
@@ -142,7 +143,7 @@
             // Get today's date
             const today = new Date();
             const toDate = new Date(today);
-            toDate.setDate(today.getDate() - 1);
+            toDate.setDate(today.getDate());
             const fromDate = new Date(toDate);
             fromDate.setDate(toDate.getDate() - 15);
 
@@ -153,7 +154,7 @@
             const fromDateString = formatDate(fromDate);
             const toDateString = formatDate(toDate);
 
-            const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(searchQuery)}&from=${(fromDateString)}&to=${(toDateString)}&pageSize=${pageSize}&language=${language}&page=${page}&sortBy=${sortBy}&apiKey=222a6988d2c44e05ab11aaaaf619e4e0`;
+            const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(searchQuery)}&from=${(fromDateString)}&to=${(toDateString)}&pageSize=${pageSize}&language=${language}&page=${page}&sortBy=${sortBy}&apiKey=${apikey}`;
             let response = await fetch(url);
             let data = await response.json();
             console.log(data);
