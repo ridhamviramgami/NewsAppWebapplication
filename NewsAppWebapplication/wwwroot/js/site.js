@@ -1,68 +1,135 @@
-﻿const FetchNews = async (page) => {
-    console.log("fetching news...");
-    var url = 'https://newsapi.org/v2/everything?' +
-        'q=india&' +
-        'from=2024-10-09' +
-        'pageSize=20&' +
-        "lanuage=hi" + 
-        'Page=' + page +
-        'sortBy=popularity&' +
-        'apiKey=6953ea382486420d83efb8ee4c629616';
+﻿let currentPage = 1;
+        let pageSize = 5; // Default page size
+        let searchQuery = 'Times of India'; // Default search query
+        let language = ''; // Default language (all languages)
+        let sortBy = 'publishedAt'; // Default sort option
+        let totalResults = 0; // Total number of results
+        let apikey = "6953ea382486420d83efb8ee4c629616"; //api key
 
-    var req = new Request(url);
+        const FetchNews = async (page) => {
+            console.log("fetching news...");
 
-    //let a = await fetch(req)
-    //let response = await a.json()
-    //Console.log(JSON.stringify(response))
+            // Get today's date
+            const today = new Date();
+            const toDate = new Date(today);
+            toDate.setDate(today.getDate());
+            const fromDate = new Date(toDate);
+            fromDate.setDate(toDate.getDate() - 15);
 
-    let response = {
-        "Status": 0,
-        "Error": null,
-        "TotalResults": 2,
-        "Articles": [
-            {
-                "Source": {
-                    "Id": "marca",
-                    "Name": "Marca"
-                },
-                "Author": "marca.com",
-                "Title": "MARCA America Award Leo Messi: The number 1 among the number 1s",
-                "Description": "A change in FC Barcelona, the number 20 jersey is retired, Deco leaves the field and the number 30 jersey, Messi, steps onto the pitch.&quot; No one could have imagined that those",
-                "Url": "https://www.marca.com/en/football/mls/2024/10/09/67064b6c46163f6b3a8b459c.html",
-                "UrlToImage": "https://phantom-marca.unidadeditorial.es/8f1e88b42097ecfea476bd011f085ce5/resize/1200/f/webp/assets/multimedia/imagenes/2024/10/09/17284660914942.jpg",
-                "PublishedAt": "2024-10-09T09:34:23Z",
-                "Content": "A change in FC Barcelona, the number 20 jersey is retired, Deco leaves the field and the number 30 jersey, Messi, steps onto the pitch.\" No one could have imagined that those words, spoken by the sta… [+2978 chars]"
-            },
-            {
-                "Source": {
-                    "Id": null,
-                    "Name": "The Japan Times"
-                },
-                "Author": "Haitham EL-TABEI",
-                "Title": "From boom to budgeting as reality bites for Saudi football",
-                "Description": "After a jaw-dropping 2023, Saudi transfer spending slumped from $957 million to $431 million in the latest window.",
-                "Url": "https://www.japantimes.co.jp/sports/2024/10/09/soccer/saudi-arabia-soccer-spending-slump/",
-                "UrlToImage": "https://www.japantimes.co.jp/japantimes/uploads/images/2024/10/09/426711.JPG?v=3.1",
-                "PublishedAt": "2024-10-09T00:30:00Z",
-                "Content": "Riyadh A billion-dollar binge that brought some of soccer's biggest names to Saudi Arabia's modest league has given way to a more cautious phase, with spending down dramatically this year.\r\nAfter a j… [+422 chars]"
+            const formatDate = (date) => {
+                return date.toISOString().split('T')[0]; // Convert to ISO format and extract the date part
+            };
+
+            const fromDateString = formatDate(fromDate);
+            const toDateString = formatDate(toDate);
+
+            const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(searchQuery)}&from=${(fromDateString)}&to=${(toDateString)}&pageSize=${pageSize}&language=${language}&page=${page}&sortBy=${sortBy}&apiKey=${apikey}`;
+            let response = await fetch(url);
+            let data = await response.json();
+            console.log(data);
+
+            totalResults = data.totalResults;
+            document.getElementById("resultcount").innerHTML = totalResults;
+
+            let str = "";
+            for (let item of data.articles) {
+                str += `
+                            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                                <div class="card custom-card" style="height: 100%; display: flex; flex-direction: column;">
+                                    <img src="${item.urlToImage}" class="card-img-top" alt="${item.title}" style="object-fit: cover; height: 200px;">
+                                    <div class="card-body d-flex flex-grow-1 flex-column">
+                                        <h5 class="card-title">${item.title}</h5>
+                                        <p class="card-text" style="flex-grow: 1;">${(item.description)}</p>
+                                        <a href="${item.url}" target="_blank" class="btn btn-success mt-auto">Read full article</a>
+                                    </div>
+                                </div>
+                            </div>`;
             }
-        ]
-    }
+            document.querySelector(".content").innerHTML = str;
 
-    console.log(response);
+            // Generate pagination
+            generatePagination();
+        };
 
-    let str = ""
-    resultcount.innerHTML = response.TotalResults
-    for (let item of response.Articles) {
-        str = str + `<div class="card my-4 mx-2" style="width: 18rem;">
-                                        <img src="${item.UrlToImage}" class="card-img-top" alt="...">
-                                        <div class="card-body">
-                                            <h5 class="card-title">${item.Title}</h5>
-                                            <p class="card-text">${item.Description}</a>
-                                            <a href="${item.url}" taget="_blank" class="btn btn-primary">Go somewhere</a>
-                                        </div>
-                                    </div>`
-    }
-    document.querySelector(".content").innerHTML = str
-    FetchNews(1)
-}
+        const generatePagination = () => {
+            const pagination = document.getElementById("pagination");
+            pagination.innerHTML = ""; // Clear existing pagination
+
+            const totalPages = Math.ceil(totalResults / pageSize);
+            const maxPagesToShow = 5;
+            let startPage, endPage;
+
+            if (totalPages <= maxPagesToShow) {
+                startPage = 1;
+                endPage = totalPages;
+            } else {
+                if (currentPage <= Math.ceil(maxPagesToShow / 2)) {
+                    startPage = 1;
+                    endPage = maxPagesToShow;
+                } else if (currentPage + Math.floor(maxPagesToShow / 2) >= totalPages) {
+                    startPage = totalPages - maxPagesToShow + 1;
+                    endPage = totalPages;
+                } else {
+                    startPage = currentPage - Math.floor(maxPagesToShow / 2);
+                    endPage = currentPage + Math.floor(maxPagesToShow / 2);
+                }
+            }
+
+            // Add previous button
+            const prevLi = document.createElement("li");
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" onclick="goToPage(${currentPage - 1})">&lt;</a>`;
+            pagination.appendChild(prevLi);
+
+            // Add page number buttons
+            for (let i = startPage; i <= endPage; i++) {
+                const li = document.createElement("li");
+                li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                li.innerHTML = `<a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>`;
+                pagination.appendChild(li);
+            }
+
+            // Add next button
+            const nextLi = document.createElement("li");
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" onclick="goToPage(${currentPage + 1})">&gt;</a>`;
+            pagination.appendChild(nextLi);
+        };
+
+        const goToPage = (page) => {
+            if (page < 1 || page > Math.ceil(totalResults / pageSize)) return;
+            currentPage = page;
+            FetchNews(currentPage);
+        };
+
+        const setSearchQuery = (query) => {
+            searchQuery = query; // Update search query
+            document.getElementById("searchInput").value = query; // Update input value
+            currentPage = 1; // Reset to first page
+
+            // Update active tab
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`a[onclick="setSearchQuery('${query}')"]`).classList.add('active');
+
+            FetchNews(currentPage); // Fetch news with new query
+        };
+
+        document.getElementById("searchForm").onsubmit = (event) => {
+            event.preventDefault(); // Prevent form submission
+            searchQuery = document.getElementById("searchInput").value.trim() || 'india'; // Update search query
+            language = document.getElementById("languageSelect").value; // Update selected language
+            sortBy = document.getElementById("sortSelect").value; // Update selected sort option
+            currentPage = 1; // Reset to first page
+            FetchNews(currentPage); // Fetch news with new query and language
+        };
+
+        document.getElementById("pageSizeSelect").onchange = (event) => {
+            pageSize = parseInt(event.target.value); // Update page size
+            currentPage = 1; // Reset to first page
+            FetchNews(currentPage); // Fetch news with new page size
+        };
+
+        // Initial fetch
+        FetchNews(currentPage);

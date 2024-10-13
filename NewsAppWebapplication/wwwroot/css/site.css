@@ -1,4 +1,4 @@
-html {
+/*html {
   font-size: 14px;
 }
 
@@ -15,4 +15,35 @@ html {
 
 body {
   margin-bottom: 60px;
+}*/
+.custom-card {
+    transition: transform 0.3s, box-shadow 0.3s; /* Transition for smooth hover effect */
+    overflow: hidden; /* Prevent overflow of content */
 }
+
+    .custom-card:hover {
+        transform: scale(1.05); /* Zoom effect on hover */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+    }
+
+.nav-link {
+    position: relative;
+    text-decoration: none; /* Remove default underline */
+}
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px; /* Adjust height of the underline */
+        background-color: #dc3545; /* Color of the underline */
+        transform: scaleX(0);
+        transition: transform 0.3s ease; /* Smooth transition */
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+        transform: scaleX(1); /* Show the underline on hover or if active */
+    }
