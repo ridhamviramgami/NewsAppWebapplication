@@ -102,7 +102,7 @@ namespace NewsAppWebapplication.Controllers
                     loginAPIModel.Token = Guid.NewGuid().ToString();
                     var getlogin = _iaccountServices.GetLogin(loginAPIModel);
 
-                    if (getlogin.UserId != null)
+                    if (getlogin.UserId != 0)
                     {
                         return Redirect("/Home/Index");
                     }
