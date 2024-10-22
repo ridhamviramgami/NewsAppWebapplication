@@ -80,7 +80,7 @@ namespace Services
 
                 if (loginAPIModel != null)
                 {
-                    var checkdata = _context.usermaster.Where(x => (x.Email == loginAPIModel.Email || x.Password == loginAPIModel.Password && x.IsActive == true)).FirstOrDefault();
+                    var checkdata = _context.usermaster.Where(x => (x.Email == loginAPIModel.Email && x.Password == loginAPIModel.Password && x.IsActive == true)).FirstOrDefault();
 
                     if (checkdata != null)
                     {
