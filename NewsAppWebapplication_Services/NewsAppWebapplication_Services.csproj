@@ -1,23 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
-    <PackageReference Include="NewsAPI" Version="0.7.0" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NewsAppWebapplication_Helper\NewsAppWebapplication_Helper.csproj" />
     <ProjectReference Include="..\NewsAppWebapplication_IServices\NewsAppWebapplication_IServices.csproj" />
     <ProjectReference Include="..\NewsAppWebapplication_Model\NewsAppWebapplication_Model.csproj" />
-    <ProjectReference Include="..\NewsAppWebapplication_Services\NewsAppWebapplication_Services.csproj" />
   </ItemGroup>
 
 </Project>
