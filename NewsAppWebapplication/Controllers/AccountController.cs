@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Routing;
+﻿using Helper.CommonHelper;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Model.API_Model;
 using Model.Model;
@@ -7,7 +8,7 @@ using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace NewsAppWebapplication.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         #region Private Variable
         private readonly IHostingEnvironment _hostingEnvironment;
@@ -41,19 +42,27 @@ namespace NewsAppWebapplication.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                #region Validation
+                if (string.IsNullOrWhiteSpace(usermaster.Name) || string.IsNullOrWhiteSpace(usermaster.Email) || string.IsNullOrWhiteSpace(usermaster.Mobile) || string.IsNullOrWhiteSpace(usermaster.Password))
                 {
-                    var isAddData = _iaccountServices.NewRegistration(usermaster);
-
-                    if (isAddData)
-                    {
-                        return RedirectToAction("Login");
-                    }
-                    else
-                    {
-                        return View();
-                    }
+                    SetDisplayToast(Toster.E_Type, APIMessage.PassMandatoryFields);
+                    return View();
                 }
+                #endregion
+
+                var isAddData = _iaccountServices.NewRegistration(usermaster);
+
+                if (isAddData)
+                {
+                    SetDisplayToast(Toster.S_Type, APIMessage.RegistrationSuccess);
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    SetDisplayToast(Toster.E_Type, APIMessage.RegistrationFailed);
+                    return View();
+                }
+
                 return View();
             }
             catch (Exception)
@@ -83,10 +92,11 @@ namespace NewsAppWebapplication.Controllers
                 if (!ModelState.IsValid)
                 {
                     #region Validation
-                    //if (string.IsNullOrWhiteSpace(loginAPIModel.Username) || string.IsNullOrWhiteSpace(loginAPIModel.Password))
-                    //{
-                    //    SetDisplayToast(Toster.E_Type, APIMessage.PassMandatoryFields);
-                    //}
+                    if (string.IsNullOrWhiteSpace(loginAPIModel.Email) || string.IsNullOrWhiteSpace(loginAPIModel.Password))
+                    {
+                        SetDisplayToast(Toster.E_Type, APIMessage.PassMandatoryFields);
+                        return View();
+                    }
                     #endregion
 
                     loginAPIModel.Token = Guid.NewGuid().ToString();
@@ -98,6 +108,7 @@ namespace NewsAppWebapplication.Controllers
                     }
                     else
                     {
+                        SetDisplayToast(Toster.E_Type, APIMessage.InvalidCredentials);
                         return View();
                     }
                 }

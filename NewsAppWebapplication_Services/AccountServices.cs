@@ -54,7 +54,7 @@ namespace Services
             {
                 if (usermaster != null)
                 {
-                    usermaster.UserId = Guid.NewGuid().ToString();
+                    //usermaster.UserId = Guid.NewGuid().ToString();
                     usermaster.InsertedDate = DateTime.Now;
                     usermaster.IsActive = true;
                     _context.usermaster.Add(usermaster);
