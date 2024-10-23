@@ -40,7 +40,7 @@ const FetchNews = async (page) => {
                                     <div class="card-body d-flex flex-grow-1 flex-column">
                                         <h5 class="card-title">${item.title}</h5>
                                         <p class="card-text" style="flex-grow: 1;">${(item.description)}</p>
-                                        <a href="${item.url}" target="_blank" class="btn btn-success mt-auto">Read full article</a>
+                                        <a href="${item.url}" target="_blank" class="btn btn-dark mt-auto">Read full article</a>
                                     </div>
                                 </div>
                             </div>`;
@@ -92,7 +92,7 @@ const generatePagination = () => {
     // Add next button
     const nextLi = document.createElement("li");
     nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
-    nextLi.innerHTML = `<a class="page-link" href="#" onclick="goToPage(${currentPage + 1})">&gt;</a>`;
+    nextLi.innerHTML = `<a class=" page-link" href="#" onclick="goToPage(${currentPage + 1})">&gt;</a>`;
     pagination.appendChild(nextLi);
 };
 
