@@ -20,4 +20,8 @@
     <ProjectReference Include="..\NewsAppWebapplication_Services\NewsAppWebapplication_Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\image\" />
+  </ItemGroup>
+
 </Project>
