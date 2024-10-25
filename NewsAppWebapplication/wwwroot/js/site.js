@@ -4,7 +4,11 @@ let searchQuery = 'Times of India'; // Default search query
 let language = ''; // Default language (all languages)
 let sortBy = 'publishedAt'; // Default sort option
 let totalResults = 0; // Total number of results
-let apikey = "6953ea382486420d83efb8ee4c629616"; //api key
+
+
+//let apikey = "6953ea382486420d83efb8ee4c629616"; //api key
+let apikey = "222a6988d2c44e05ab11aaaaf619e4e0"; //api key
+
 
 const FetchNews = async (page) => {
     console.log("fetching news...");
